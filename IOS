@@ -1,0 +1,682 @@
+import SwiftUI
+import SwiftData
+
+// MARK: - Home Screen
+struct HomeView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            // Fixed Header
+            HStack {
+                Text("Home")
+                    .font(.system(size: 28, weight: .bold))
+                Spacer()
+                Image(systemName: "person.circle")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+            }
+            .padding(.horizontal)
+            .padding(.top, 10)
+            
+            // Scrollable Content
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    
+                    // On Air Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("On Air")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                StationCardView(imageName: "Wish", title: "Wish 107.5", subtitle: "dreams come alive", listeners: "12,480", color: .red)
+                                StationCardView(imageName: "Love", title: "Love Radio", subtitle: "Feel the love everyday!", listeners: "8,320", color: .pink)
+                                StationCardView(imageName: "Monster", title: "Monster", subtitle: "Top hits, non-stop", listeners: "6,120", color: .blue)
+                                StationCardView(imageName: "Yes", title: "Yes FM", subtitle: "All hits all day", listeners: "4,500", color: .green)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    // Recently Listen
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Recently Listen")
+                                .font(.headline)
+                            Spacer()
+                            Button(action: {}) {
+                                Text(">")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                MiniStationCard(imageName: "Monster", color: .blue)
+                                MiniStationCard(imageName: "Wish", color: .orange)
+                                MiniStationCard(imageName: "Veritas", color: .purple)
+                                MiniStationCard(imageName: "Easyrock", color: .green)
+                                MiniStationCard(imageName: "Love", color: .pink)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    // News Live
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("News Live")
+                                .font(.headline)
+                            Spacer()
+                            Button(action: {}) {
+                                Text(">")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                MiniStationCard(imageName: "Dzrm", color: .red)
+                                MiniStationCard(imageName: "Yes", color: .green)
+                                MiniStationCard(imageName: "Love", color: .blue)
+                                MiniStationCard(imageName: "Veritas", color: .orange)
+                                MiniStationCard(imageName: "Easyrock", color: .green)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    // Others
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Others")
+                                .font(.headline)
+                            Spacer()
+                            Button(action: {}) {
+                                Text(">")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                MiniStationCard(imageName: "Wish", color: .red)
+                                MiniStationCard(imageName: "Yes", color: .green)
+                                MiniStationCard(imageName: "Love", color: .blue)
+                                MiniStationCard(imageName: "Veritas", color: .orange)
+                                MiniStationCard(imageName: "Easyrock", color: .green)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+                .padding(.bottom, 140) // Space for bottom bar
+            }
+        }
+    }
+}
+
+// MARK: - Station Card
+struct StationCardView: View {
+    var imageName: String
+    var title: String
+    var subtitle: String
+    var listeners: String
+    var color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let _ = UIImage(named: imageName) {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 160, height: 100)
+                    .clipped()
+                    .cornerRadius(10)
+            } else {
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 160, height: 100)
+                    .foregroundColor(.gray)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+            }
+            
+            Text(title)
+                .font(.headline)
+            Text(subtitle)
+                .font(.caption)
+                .foregroundColor(.gray)
+            Text("Active Listeners: \(listeners)")
+                .font(.caption2)
+                .foregroundColor(.orange)
+        }
+        .frame(width: 160)
+    }
+}
+
+// MARK: - Mini Station
+struct MiniStationCard: View {
+    var imageName: String
+    var color: Color
+    var body: some View {
+        Rectangle()
+            .fill(color)
+            .frame(width: 100, height: 100)
+            .overlay(
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.white.opacity(0.9))
+                    .frame(width: 100, height: 100)
+            )
+            .cornerRadius(12)
+    }
+}
+
+// MARK: - Currently Playing Bar
+struct CurrentlyPlayingBar: View {
+    var body: some View {
+        HStack {
+            Rectangle()
+                .fill(Color.gray.opacity(0.3))
+                .frame(width: 50, height: 50)
+                .cornerRadius(8)
+                .overlay(
+                    Image(systemName: "music.note")
+                        .foregroundColor(.primary)
+                )
+            VStack(alignment: .leading) {
+                Text("Now Playing: Wish 107.5")
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                Text("Your music dreams come alive")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Button(action: {}) {
+                Image(systemName: "play.fill")
+                    .font(.title2)
+                    .foregroundColor(.blue)
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground).shadow(radius: 2))
+    }
+}
+
+// MARK: - Bottom Navigation
+struct BottomNavBar: View {
+    @Binding var selectedTab: Int
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: { selectedTab = 0 }) {
+                VStack {
+                    Image(systemName: "house.fill")
+                    Text("Home").font(.caption2)
+                }
+                .foregroundColor(selectedTab == 0 ? .blue : .secondary)
+            }
+            Spacer()
+            Button(action: { selectedTab = 1 }) {
+                VStack {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search").font(.caption2)
+                }
+                .foregroundColor(selectedTab == 1 ? .blue : .secondary)
+            }
+            Spacer()
+            Button(action: { selectedTab = 2 }) {
+                VStack {
+                    Image(systemName: "person.fill")
+                    Text("Profile").font(.caption2)
+                }
+                .foregroundColor(selectedTab == 2 ? .blue : .secondary)
+            }
+            Spacer()
+        }
+        .padding(.vertical, 8)
+        .background(Color(.systemBackground).shadow(radius: 2))
+    }
+}
+
+// MARK: - Main Tab
+struct MainTabView: View {
+    @State private var selectedTab = 0
+    @State private var showPlayer = false
+    
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            Group {
+                if selectedTab == 0 {
+                    HomeView()
+                } else if selectedTab == 1 {
+                    SearchView()
+                } else {
+                    ProfileView()
+                }
+            }
+            VStack(spacing: 0) {
+                Spacer()
+                CurrentlyPlayingBar()
+                    .onTapGesture { showPlayer.toggle() }
+                BottomNavBar(selectedTab: $selectedTab)
+            }
+        }
+        .edgesIgnoringSafeArea(.bottom)
+        .sheet(isPresented: $showPlayer) {
+            PlayerView()
+                .presentationDetents([.medium, .large])
+        }
+    }
+}
+
+// MARK: - Login + Signup (combined in ONE place)
+struct LoginView: View {
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isShowingSignup = false
+    @State private var isAuthenticated = false
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 16) {
+                VStack(spacing: 4) {
+                    Image(systemName: "radio.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 70, height: 70)
+                        .foregroundColor(.black)
+                }
+                .padding(.top, 50)
+                
+                VStack(spacing: 4) {
+                    Text("Log in to your account").font(.headline)
+                    Text("Enter your email to sign in for this app")
+                        .font(.subheadline).foregroundColor(.gray)
+                }
+                .multilineTextAlignment(.center)
+                .padding(.top, 8)
+                
+                VStack(spacing: 12) {
+                    TextField("Username", text: $username)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                }
+                .padding(.top, 12)
+                
+                Button(action: { loginUser() }) {
+                    Text("Log in")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(10)
+                }
+                .padding(.top, 8)
+                
+                HStack(spacing: 4) {
+                    Text("Don’t have an account?").foregroundColor(.gray)
+                    Button(action: { isShowingSignup = true }) {
+                        Text("Create Here").foregroundColor(.blue)
+                    }
+                }
+                .font(.footnote)
+                .padding(.top, 6)
+                
+                Spacer()
+            }
+            .padding(.horizontal, 20)
+            .ignoresSafeArea(edges: .bottom)
+            .navigationDestination(isPresented: $isShowingSignup) {
+                SignupView()
+            }
+            .background(
+                NavigationLink(destination: MainTabView(), isActive: $isAuthenticated) { EmptyView() }
+                    .hidden()
+            )
+        }
+    }
+    
+    private func loginUser() {
+        let savedUsername = UserDefaults.standard.string(forKey: "savedUsername")
+        let savedPassword = UserDefaults.standard.string(forKey: "savedPassword")
+        if username == savedUsername && password == savedPassword {
+            isAuthenticated = true
+        } else {
+            isAuthenticated = false
+        }
+    }
+}
+
+struct SignupView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var reEnterPassword: String = ""
+    @State private var showPasswordMismatchAlert = false
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Create your account").font(.largeTitle).bold().padding(.top, 50)
+            VStack(spacing: 12) {
+                TextField("Username", text: $username)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .textInputAutocapitalization(.never)
+                SecureField("Password", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                SecureField("Re-Enter Password", text: $reEnterPassword)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+            }
+            .padding(.top, 20)
+            
+            Button(action: {
+                if password == reEnterPassword && !password.isEmpty {
+                    UserDefaults.standard.set(username, forKey: "savedUsername")
+                    UserDefaults.standard.set(password, forKey: "savedPassword")
+                    dismiss()
+                } else {
+                    showPasswordMismatchAlert = true
+                }
+            }) {
+                Text("Create")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(10)
+            }
+            .padding(.top, 12)
+            .alert("Passwords do not match", isPresented: $showPasswordMismatchAlert) {
+                Button("OK", role: .cancel) {}
+            }
+            
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+        .navigationBarBackButtonHidden(true)
+    }
+}
+
+// MARK: - Search
+struct Station: Identifiable {
+    let id = UUID()
+    let name: String
+    let image: String
+}
+
+struct SearchView: View {
+    @State private var searchText = ""
+    let stations = [
+        Station(name: "DZRM 612", image: "Dzrm"),
+        Station(name: "Monster FM", image: "Monster"),
+        Station(name: "Yes FM", image: "Yes"),
+        Station(name: "Veritas", image: "Veritas"),
+        Station(name: "Wish 107.5", image: "Wish"),
+        Station(name: "Easy Rock", image: "Easyrock"),
+        Station(name: "Love Radio", image: "Love"),
+        Station(name: "Radyo 5", image: "Radyo5"),
+        Station(name: "Barangay LS 97.1", image: "Barangay"),
+        Station(name: "Home Radio", image: "Home"),
+        Station(name: "Energy FM", image: "Energy"),
+        Station(name: "DWLS FM", image: "Dwls"),
+        Station(name: "Brigada News FM", image: "Brigada"),
+        Station(name: "Radyo Natin", image: "RadyoNatin")
+    ]
+    
+    var filteredStations: [Station] {
+        if searchText.isEmpty {
+            return stations
+        } else {
+            return stations.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Search")
+                    .font(.system(size: 28, weight: .bold))
+                Spacer()
+                Image(systemName: "person.circle")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+            }
+            .padding(.horizontal)
+            .padding(.top, 10)
+            
+            HStack {
+                Image(systemName: "magnifyingglass").foregroundColor(.gray)
+                TextField("Search", text: $searchText)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .padding(.horizontal)
+            
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(alignment: .leading, spacing: 20) {
+                    if filteredStations.isEmpty {
+                        Text("Station Not Found")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, minHeight: 200, alignment: .center)
+                    } else {
+                        Text("Featured Stations").font(.headline).padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(filteredStations) { station in
+                                    VStack {
+                                        Image(station.image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 120, height: 120)
+                                            .cornerRadius(12)
+                                        Text(station.name).font(.caption).foregroundColor(.primary)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        Text("All Stations").font(.headline).padding(.horizontal)
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                            ForEach(filteredStations) { station in
+                                VStack {
+                                    Image(station.image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 150, height: 150)
+                                        .cornerRadius(8)
+                                    Text(station.name).font(.caption).foregroundColor(.primary)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+                .padding(.vertical)
+            }
+            Spacer()
+        }
+    }
+}
+
+// MARK: - Profile
+struct ProfileView: View {
+    @State private var username: String = ""
+    @State private var email: String = ""
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 28) {
+                    VStack(spacing: 8) {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.gray)
+                            .clipShape(Circle())
+                        Text(username.isEmpty ? "Guest" : username).font(.headline)
+                        Text(email.isEmpty ? "Email not set" : email).font(.subheadline).foregroundColor(.gray)
+                    }
+                    .padding(.top, 20)
+                    
+                    NavigationLink(destination: EditProfileView(username: $username, email: $email)) {
+                        Text("Edit Profile")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                            .cornerRadius(25)
+                            .padding(.horizontal)
+                    }
+                    
+                    Divider()
+                    
+                    Button(action: {
+                        UserDefaults.standard.removeObject(forKey: "savedUsername")
+                        UserDefaults.standard.removeObject(forKey: "savedPassword")
+                        UserDefaults.standard.removeObject(forKey: "savedEmail")
+                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                            scene.windows.first?.rootViewController = UIHostingController(rootView: LoginView())
+                            scene.windows.first?.makeKeyAndVisible()
+                        }
+                    }) {
+                        Text("Log Out")
+                            .font(.headline)
+                            .foregroundColor(.red)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(25)
+                            .padding(.horizontal)
+                    }
+                    
+                    Spacer()
+                }
+            }
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+// MARK: - Edit Profile
+struct EditProfileView: View {
+    @Binding var username: String
+    @Binding var email: String
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            TextField("Enter username", text: $username)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            TextField("Enter email", text: $email)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+            
+            Button(action: {
+                UserDefaults.standard.set(username, forKey: "savedUsername")
+                UserDefaults.standard.set(email, forKey: "savedEmail")
+                dismiss()
+            }) {
+                Text("Save")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(25)
+            }
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Edit Profile")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Back") { dismiss() }
+            }
+        }
+    }
+}
+
+// MARK: - Player
+struct PlayerView: View {
+    @State private var isPlaying = false
+    @State private var volume: Double = 0.5
+    
+    var body: some View {
+        VStack(spacing: 30) {
+            Rectangle()
+                .fill(Color.gray.opacity(0.3))
+                .frame(width: 300, height: 300)
+                .cornerRadius(12)
+                .overlay(
+                    Image(systemName: "music.note")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.primary.opacity(0.7))
+                        .frame(width: 100, height: 100)
+                )
+            
+            VStack(spacing: 12) {
+                Text("Wish 107.5").font(.title).bold()
+                Text("Your music dreams come alive").foregroundColor(.gray)
+            }
+            
+            Slider(value: $volume, in: 0...1)
+                .padding(.horizontal)
+            
+            HStack(spacing: 50) {
+                Button(action: {}) {
+                    Image(systemName: "backward.fill").font(.largeTitle)
+                }
+                Button(action: { isPlaying.toggle() }) {
+                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill").font(.system(size: 64))
+                }
+                Button(action: {}) {
+                    Image(systemName: "forward.fill").font(.largeTitle)
+                }
+            }
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+// MARK: - Entry Point
+struct ContentView: View {
+    var body: some View {
+        LoginView()
+    }
+}
+
+#Preview {
+    ContentView()
+}
